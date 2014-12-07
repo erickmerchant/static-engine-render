@@ -1,0 +1,30 @@
+{
+  "name": "static-engine-render",
+  "description": "Plugin for static-engine-render.",
+  "main": "index.js",
+  "repository": "erickmerchant/static-engine-render",
+  "keywords": [
+    "static-engine"
+  ],
+  "author": "Erick Merchant <erickmerchant@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erickmerchant/static-engine-render/issues"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "homepage": "https://github.com/erickmerchant/static-engine-render",
+  "dependencies": {
+    "es6-promise": "^2.0.0",
+    "mkdirp": "^0.5.0"
+  },
+  "peerDependencies": {
+      "static-engine": "^5.0.0"
+  },
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "mocha": "^2.0.0",
+    "mock-fs": "^2.3.1"
+  }
+}
