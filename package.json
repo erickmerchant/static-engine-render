@@ -1,6 +1,6 @@
 {
   "name": "static-engine-render",
-  "description": "Plugin for static-engine-render.",
+  "description": "Plugin for static-engine.",
   "main": "index.js",
   "repository": "erickmerchant/static-engine-render",
   "keywords": [
