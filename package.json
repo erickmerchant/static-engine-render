@@ -20,7 +20,7 @@
     "mkdirp": "^0.5.0"
   },
   "peerDependencies": {
-    "static-engine": "^5.0.0"
+    "static-engine": "^5.0.0, ^6.0.0"
   },
   "devDependencies": {
     "chai": "^1.9.2",
