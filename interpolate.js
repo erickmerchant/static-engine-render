@@ -1,6 +1,6 @@
 module.exports = function(string, data) {
 
-    return string.replace(/{([^{}]*)}/g, function(original, match) {
+    return string.replace(/\:([^\:\/]*)/g, function(original, match) {
 
         var result = data;
 
