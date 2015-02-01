@@ -21,8 +21,10 @@
   },
   "devDependencies": {
     "chai": "^1.9.2",
+    "glob": "^4.3.5",
     "mocha": "^2.0.0",
-    "mock-fs": "^2.3.1"
+    "mock-fs": "^2.3.1",
+    "rewire": "^2.1.4"
   },
   "version": "1.1.0"
 }
