@@ -19,9 +19,6 @@
     "es6-promise": "^2.0.0",
     "mkdirp": "^0.5.0"
   },
-  "peerDependencies": {
-    "static-engine": "^5.0.0, ^6.0.0"
-  },
   "devDependencies": {
     "chai": "^1.9.2",
     "mocha": "^2.0.0",
