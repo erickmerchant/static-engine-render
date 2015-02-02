@@ -3,6 +3,7 @@ var fs = require('fs');
 var Promise = require('es6-promise').Promise;
 var interpolate = require('./interpolate.js');
 var mkdirp = require('mkdirp');
+var asyncDone = require('async-done');
 
 function plugin(route, renderer) {
 
@@ -12,27 +13,42 @@ function plugin(route, renderer) {
 
             return new Promise(function(resolve, reject){
 
-                renderer(page).then(function (html) {
+                asyncDone(function(done) {
 
-                    var url = interpolate(route, page || {});
+                    var x = renderer(page, done);
 
-                    var file = plugin.directory + url;
+                    if(x != undefined) {
 
-                    var directory;
+                        return x;
+                    }
 
-                    directory = path.dirname(file);
+                }, function(err, html) {
 
-                    mkdirp(directory, function (err) {
+                    if(err) {
+                        reject(err);
+                    }
+                    else {
 
-                        if (err) reject(err);
+                        var url = interpolate(route, page || {});
 
-                        fs.writeFile(file, html, function (err, data) {
+                        var file = plugin.directory + url;
+
+                        var directory;
+
+                        directory = path.dirname(file);
+
+                        mkdirp(directory, function (err) {
 
                             if (err) reject(err);
 
-                            resolve(page);
+                            fs.writeFile(file, html, function (err, data) {
+
+                                if (err) reject(err);
+
+                                resolve(page);
+                            });
                         });
-                    });
+                    }
                 });
             });
         });
