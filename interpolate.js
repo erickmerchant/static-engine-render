@@ -16,7 +16,7 @@ module.exports = function(string, data) {
             }
             else {
 
-                throw Error('failed to interpolate ' + parts.join('.') + ' at ' + parts.slice(0, i+1).join('.'));
+                throw new Error('failed to interpolate ' + parts.join('.') + ' at ' + parts.slice(0, i+1).join('.'));
             }
         }
 
@@ -26,7 +26,7 @@ module.exports = function(string, data) {
         }
         else {
 
-            throw Error('failed to interpolate ' + parts.join('.') + ' at ' + parts.slice(0, i+1).join('.'));
+            throw new Error('failed to interpolate ' + parts.join('.') + ' at ' + parts.slice(0, i+1).join('.'));
         }
 
         return result;
