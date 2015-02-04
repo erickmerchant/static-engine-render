@@ -39,14 +39,16 @@ function plugin(route, renderer) {
 
                         mkdirp(directory, function (err) {
 
-                            if (err) reject(err);
+                            if (err) { reject(err); }
+                            else
+                            {
+                                fs.writeFile(file, html, function (err, data) {
 
-                            fs.writeFile(file, html, function (err, data) {
-
-                                if (err) reject(err);
-
-                                resolve(page);
-                            });
+                                    if (err) reject(err);
+                                    else
+                                        resolve(page);
+                                });
+                            }
                         });
                     }
                 });
