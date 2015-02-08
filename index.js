@@ -3,7 +3,6 @@ var fs = require('fs');
 var Promise = require('es6-promise').Promise;
 var interpolate = require('./interpolate.js');
 var mkdirp = require('mkdirp');
-var asyncDone = require('async-done');
 
 function plugin(route, renderer) {
 
@@ -13,45 +12,43 @@ function plugin(route, renderer) {
 
             return new Promise(function(resolve, reject){
 
-                asyncDone(function(done) {
+                var url = interpolate(route, page || {});
 
-                    var x = renderer(page, done);
+                var file = plugin.directory + url;
 
-                    if(x != undefined) {
+                var directory = path.dirname(file);
 
-                        return x;
-                    }
+                var write = function(html) {
 
-                }, function(err, html) {
+                    mkdirp(directory, function (err) {
+
+                        if (err) { reject(err); }
+                        else
+                        {
+                            fs.writeFile(file, html, function (err, html) {
+
+                                if (err) reject(err);
+                                else
+                                    resolve(page);
+                            });
+                        }
+                    });
+                }
+
+                var result = renderer(page, function(err, html){
 
                     if(err) {
                         reject(err);
                     }
                     else {
-
-                        var url = interpolate(route, page || {});
-
-                        var file = plugin.directory + url;
-
-                        var directory;
-
-                        directory = path.dirname(file);
-
-                        mkdirp(directory, function (err) {
-
-                            if (err) { reject(err); }
-                            else
-                            {
-                                fs.writeFile(file, html, function (err, data) {
-
-                                    if (err) reject(err);
-                                    else
-                                        resolve(page);
-                                });
-                            }
-                        });
+                        write(html);
                     }
                 });
+
+                if(typeof result !== 'undefined' && result.then) {
+
+                    result.then(write, reject);
+                }
             });
         });
 
