@@ -16,7 +16,6 @@
   },
   "homepage": "https://github.com/erickmerchant/static-engine-render",
   "dependencies": {
-    "es6-promise": "^2.0.0",
     "mkdirp": "^0.5.0"
   },
   "devDependencies": {
@@ -26,5 +25,8 @@
     "mock-fs": "^2.3.1",
     "rewire": "^2.1.4"
   },
-  "version": "2.1.1"
+  "version": "2.1.1",
+  "engines": {
+    "node": ">= 1.1.0"
+  }
 }

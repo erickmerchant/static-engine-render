@@ -1,6 +1,5 @@
 var path = require('path');
 var fs = require('fs');
-var Promise = require('es6-promise').Promise;
 var interpolate = require('./interpolate.js');
 var mkdirp = require('mkdirp');
 

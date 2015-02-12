@@ -1,7 +1,6 @@
 var mock = require('mock-fs');
 var assert = require('chai').assert;
 var rewire = require('rewire');
-var Promise = require('es6-promise').Promise;
 
 describe('plugin', function(){
 
