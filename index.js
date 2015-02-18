@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var interpolate = require('./interpolate.js');
 var mkdirp = require('mkdirp');
+var async_done = require('async-done');
 
 function plugin(route, renderer) {
 
@@ -34,20 +35,19 @@ function plugin(route, renderer) {
                     });
                 }
 
-                var result = renderer(page, function(err, html){
+                async_done(function(done){
+
+                    return renderer(page, done);
+
+                }, function(err, result){
 
                     if(err) {
                         reject(err);
                     }
                     else {
-                        write(html);
+                        write(result);
                     }
                 });
-
-                if(typeof result !== 'undefined' && result.then) {
-
-                    result.then(write, reject);
-                }
             });
         });
 
