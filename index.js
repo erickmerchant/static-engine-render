@@ -4,7 +4,7 @@ var interpolate = require('./interpolate.js');
 var mkdirp = require('mkdirp');
 var async_done = require('async-done');
 
-function plugin(route, renderer) {
+module.exports = function(route, renderer) {
 
     return function (pages) {
 
@@ -12,40 +12,36 @@ function plugin(route, renderer) {
 
             return new Promise(function(resolve, reject){
 
-                var url = interpolate(route, page || {});
-
-                var file = plugin.directory + url;
+                var file = interpolate(route, page || {});
 
                 var directory = path.dirname(file);
-
-                var write = function(html) {
-
-                    mkdirp(directory, function (err) {
-
-                        if (err) { reject(err); }
-                        else
-                        {
-                            fs.writeFile(file, html, function (err, html) {
-
-                                if (err) reject(err);
-                                else
-                                    resolve(page);
-                            });
-                        }
-                    });
-                }
 
                 async_done(function(done){
 
                     return renderer(page, done);
 
-                }, function(err, result){
+                }, function(err, html){
 
                     if(err) {
                         reject(err);
                     }
                     else {
-                        write(result);
+
+                        mkdirp(directory, function (err) {
+
+                            if (err) { reject(err); }
+                            else
+                            {
+                                fs.writeFile(file, html, function (err, html) {
+
+                                    if (err) { reject(err); }
+                                    else
+                                    {
+                                        resolve(page);
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             });
@@ -53,13 +49,4 @@ function plugin(route, renderer) {
 
         return Promise.all(promises);
     };
-}
-
-plugin.directory = './';
-
-plugin.configure = function(directory) {
-
-    plugin.directory = directory;
 };
-
-module.exports = plugin;

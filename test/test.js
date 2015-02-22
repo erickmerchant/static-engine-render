@@ -12,9 +12,7 @@ describe('plugin', function(){
 
         var mocked_fs = mock.fs({'./test/target/': {}});
 
-        var directory = './test/target/';
-
-        var plugin = render(':slug/index.html', function(page) {
+        var plugin = render('./test/target/:slug/index.html', function(page) {
 
             return new Promise(function(resolve, reject) {
 
@@ -29,8 +27,6 @@ describe('plugin', function(){
         render.__set__('fs', mocked_fs);
 
         render.__set__('mkdirp', mkdirp);
-
-        render.configure(directory);
 
         plugin([{slug: 'test-1-2-3', title: 'Test One Two Three'}]).then(function(pages){
 
@@ -49,31 +45,6 @@ describe('plugin', function(){
 
                 done();
             });
-        });
-    });
-
-    describe('.configure', function(){
-
-        it('if it\'s not called the directory should be the default', function(done){
-
-            var render = require('../index.js');
-
-            assert.deepEqual(render.directory, './');
-
-            done();
-        });
-
-        it('should set the directory', function(done){
-
-            var render = require('../index.js');
-
-            var directory = './test/target/';
-
-            render.configure(directory);
-
-            assert.equal(render.directory, directory);
-
-            done();
         });
     });
 });
