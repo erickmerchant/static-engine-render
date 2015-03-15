@@ -28,7 +28,8 @@ describe('plugin', function(){
 
         render.__set__('mkdirp', mkdirp);
 
-        plugin([{slug: 'test-1-2-3', title: 'Test One Two Three'}]).then(function(pages){
+        plugin([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
+        .then(function(pages){
 
             var globbed = {};
 
@@ -45,6 +46,7 @@ describe('plugin', function(){
 
                 done();
             });
-        });
+        })
+        .catch(done);
     });
 });
