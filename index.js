@@ -2,7 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var interpolate = require('./interpolate.js');
 var mkdirp = require('mkdirp');
-var async_done = require('async-done');
+var once = require('once');
 
 module.exports = function(route, renderer) {
 
@@ -16,11 +16,7 @@ module.exports = function(route, renderer) {
 
                 var directory = path.dirname(file);
 
-                async_done(function(done){
-
-                    return renderer(page, done);
-
-                }, function(err, html){
+                var done = once(function(err, html){
 
                     if(err) {
                         reject(err);
@@ -44,6 +40,17 @@ module.exports = function(route, renderer) {
                         });
                     }
                 });
+
+                var result = renderer(page, done);
+
+                if(result && typeof result.then == 'function') {
+
+                    result.then(function(html){
+
+                        done(null, html);
+
+                    }, done)
+                }
             });
         });
 
