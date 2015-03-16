@@ -10,7 +10,7 @@ describe('plugin', function(){
         var mkdirp = rewire('mkdirp');
         var glob = rewire('glob');
 
-        var mocked_fs = mock.fs({'./test/target/': {}});
+        var mockedFS = mock.fs({'./test/target/': {}});
 
         var plugin = render('./test/target/:slug/index.html', function(page) {
 
@@ -20,11 +20,11 @@ describe('plugin', function(){
             });
         });
 
-        mkdirp.__set__('fs', mocked_fs);
+        mkdirp.__set__('fs', mockedFS);
 
-        glob.__set__('fs', mocked_fs);
+        glob.__set__('fs', mockedFS);
 
-        render.__set__('fs', mocked_fs);
+        render.__set__('fs', mockedFS);
 
         render.__set__('mkdirp', mkdirp);
 
@@ -37,7 +37,7 @@ describe('plugin', function(){
 
                 files.forEach(function(file) {
 
-                    globbed[file] = mocked_fs.readFileSync(file, { encoding: 'utf-8' });
+                    globbed[file] = mockedFS.readFileSync(file, { encoding: 'utf-8' });
                 });
 
                 assert.deepEqual(globbed, {
