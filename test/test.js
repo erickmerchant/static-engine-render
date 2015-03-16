@@ -4,7 +4,7 @@ var rewire = require('rewire');
 
 describe('plugin', function(){
 
-    it('it should interpolate the route provided', function(done){
+    it('it should interpolate the route provided and render with the renderer', function(done){
 
         var render = rewire('../index.js');
         var mkdirp = rewire('mkdirp');
