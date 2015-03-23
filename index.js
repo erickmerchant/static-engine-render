@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require('fs');
-var interpolate = require('./interpolate.js');
+var reverend = require('reverend');
 var mkdirp = require('mkdirp');
 var once = require('once');
 
@@ -12,7 +12,7 @@ module.exports = function(route, renderer) {
 
             return new Promise(function(resolve, reject){
 
-                var file = interpolate(route, page || {});
+                var file = reverend(route, page || {});
 
                 var directory = path.dirname(file);
 
