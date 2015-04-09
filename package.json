@@ -1,6 +1,6 @@
 {
   "name": "static-engine-render",
-  "description": "Plugin for static-engine.",
+  "description": "Plugin for static-engine. It renders and saves a file using a provided render function for each object in the collection.",
   "main": "index.js",
   "repository": "erickmerchant/static-engine-render",
   "keywords": [
