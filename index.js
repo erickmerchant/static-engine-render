@@ -1,59 +1,48 @@
-var path = require('path');
-var fs = require('fs');
-var reverend = require('reverend');
-var mkdirp = require('mkdirp');
-var once = require('once');
+var path = require('path')
+var fs = require('fs')
+var reverend = require('reverend')
+var mkdirp = require('mkdirp')
+var once = require('once')
 
-module.exports = function(route, renderer) {
+module.exports = function (route, renderer) {
+  return function (pages) {
+    var promises = pages.map(function (page) {
+      return new Promise(function (resolve, reject) {
+        var file = reverend(route, page || {})
 
-    return function (pages) {
+        var directory = path.dirname(file)
 
-        var promises = pages.map(function (page) {
+        var done = once(function (err, html) {
+          if (err) {
+            reject(err)
+          } else {
+            mkdirp(directory, function (err) {
+              if (err) {
+                reject(err)
+              } else {
+                fs.writeFile(file, html, function (err, html) {
+                  if (err) {
+                    reject(err)
+                  } else {
+                    resolve(page)
+                  }
+                })
+              }
+            })
+          }
+        })
 
-            return new Promise(function(resolve, reject){
+        var result = renderer(page, done)
 
-                var file = reverend(route, page || {});
+        if (result && typeof result.then === 'function') {
+          result.then(function (html) {
+            done(null, html)
 
-                var directory = path.dirname(file);
+          }, done)
+        }
+      })
+    })
 
-                var done = once(function(err, html){
-
-                    if(err) {
-                        reject(err);
-                    }
-                    else {
-
-                        mkdirp(directory, function (err) {
-
-                            if (err) { reject(err); }
-                            else
-                            {
-                                fs.writeFile(file, html, function (err, html) {
-
-                                    if (err) { reject(err); }
-                                    else
-                                    {
-                                        resolve(page);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-
-                var result = renderer(page, done);
-
-                if(result && typeof result.then == 'function') {
-
-                    result.then(function(html){
-
-                        done(null, html);
-
-                    }, done)
-                }
-            });
-        });
-
-        return Promise.all(promises);
-    };
-};
+    return Promise.all(promises)
+  }
+}
