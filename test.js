@@ -4,15 +4,15 @@ var it = require('mocha').it
 
 describe('plugin', function () {
   it('it should interpolate the route provided and render with the renderer', function (done) {
-    var rewired = require('./rewired.js')({'./test/target/': {}})
+    var rewired = mocks({'./test/target/': {}})
 
-    var plugin = rewired.render('./test/target/:slug/index.html', function (page) {
+    var render = rewired.render('./test/target/:slug/index.html', function (page) {
       return new Promise(function (resolve, reject) {
         resolve('<h1>' + page.title + '</h1>')
       })
     })
 
-    plugin([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
+    render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
       .then(function (pages) {
         var globbed = {}
 
@@ -35,3 +35,22 @@ describe('plugin', function () {
       .catch(done)
   })
 })
+
+function mocks (fsConfig) {
+  var rewire = require('rewire')
+  var mockFS = require('mock-fs')
+  var render = rewire('./index.js')
+  var glob = rewire('glob')
+  var mkdirp = rewire('mkdirp')
+  var fs = mockFS.fs(fsConfig)
+
+  mkdirp.__set__('fs', fs)
+
+  glob.__set__('fs', fs)
+
+  render.__set__('fs', fs)
+
+  render.__set__('mkdirp', mkdirp)
+
+  return { fs: fs, glob: glob, render: render }
+}
