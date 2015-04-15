@@ -20,7 +20,7 @@ module.exports = function (route, renderer) {
               if (err) {
                 reject(err)
               } else {
-                fs.writeFile(file, html, function (err, html) {
+                fs.writeFile(file, html, function (err) {
                   if (err) {
                     reject(err)
                   } else {

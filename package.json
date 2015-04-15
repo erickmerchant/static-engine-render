@@ -21,9 +21,7 @@
     "reverend": "^0.3.0"
   },
   "devDependencies": {
-    "glob": "^5.0.0",
     "mocha": "^2.0.0",
-    "mock-fs": "^2.3.1",
     "rewire": "^2.1.4",
     "standard": "^3.5.0"
   },
