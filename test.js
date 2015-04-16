@@ -129,16 +129,16 @@ function mock (files, errors) {
 
   plugin.__set__('fs', {
     writeFile: function (filename, data, callback) {
-      output['fs'][filename] = data
+      output.fs[filename] = data
 
-      callback(errors['fs'])
+      callback(errors.fs)
     }
   })
 
   plugin.__set__('mkdirp', function (directory, callback) {
-    output['mkdirp'].push(directory)
+    output.mkdirp.push(directory)
 
-    callback(errors['mkdirp'])
+    callback(errors.mkdirp)
   })
 
   return { plugin: plugin, output: output }
