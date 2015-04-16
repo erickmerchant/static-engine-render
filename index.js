@@ -9,30 +9,37 @@ module.exports = function (route, renderer) {
     var promises = pages.map(function (page) {
       return new Promise(function (resolve, reject) {
         var file = reverend(route, page || {})
-
         var directory = path.dirname(file)
+        var mkdirPromise, done, result
 
-        var done = once(function (err, html) {
+        mkdirPromise = new Promise(function (res, rej) {
+          mkdirp(directory, function (err) {
+            if (err) {
+              rej(err)
+            } else {
+              res()
+            }
+          })
+        })
+        .catch(reject)
+
+        done = once(function (err, html) {
           if (err) {
             reject(err)
           } else {
-            mkdirp(directory, function (err) {
-              if (err) {
-                reject(err)
-              } else {
-                fs.writeFile(file, html, function (err) {
-                  if (err) {
-                    reject(err)
-                  } else {
-                    resolve(page)
-                  }
-                })
-              }
+            mkdirPromise.then(function () {
+              fs.writeFile(file, html, function (err) {
+                if (err) {
+                  reject(err)
+                } else {
+                  resolve(page)
+                }
+              })
             })
           }
         })
 
-        var result = renderer(page, done)
+        result = renderer(page, done)
 
         if (result && typeof result.then === 'function') {
           result.then(function (html) {
