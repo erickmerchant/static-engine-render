@@ -12,7 +12,8 @@
     "url": "https://github.com/erickmerchant/static-engine-render/issues"
   },
   "scripts": {
-    "test": "standard && mocha"
+    "test": "standard && mocha",
+    "cover": "istanbul cover node_modules/.bin/_mocha"
   },
   "homepage": "https://github.com/erickmerchant/static-engine-render",
   "dependencies": {
@@ -21,6 +22,7 @@
     "reverend": "^0.3.0"
   },
   "devDependencies": {
+    "istanbul": "^0.3.13",
     "mocha": "^2.0.0",
     "rewire": "^2.1.4",
     "standard": "^3.5.0"
