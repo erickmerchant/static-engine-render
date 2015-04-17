@@ -8,7 +8,7 @@ module.exports = function (route, renderer) {
   return function (pages) {
     var promises = pages.map(function (page) {
       return new Promise(function (resolve, reject) {
-        var file = reverend(route, page || {})
+        var file = reverend(route, page)
         var directory = path.dirname(file)
         var mkdirPromise, done, result
 
