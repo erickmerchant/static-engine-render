@@ -1,6 +1,6 @@
 var path = require('path')
 var fs = require('fs')
-var reverend = require('reverend')
+var path2regexp = require('path-to-regexp')
 var mkdirp = require('mkdirp')
 var once = require('once')
 
@@ -8,7 +8,7 @@ module.exports = function (route, renderer) {
   return function (pages) {
     var promises = pages.map(function (page) {
       return new Promise(function (resolve, reject) {
-        var file = reverend(route, page)
+        var file = path2regexp.compile(route)(page)
         var directory = path.dirname(file)
         var mkdirPromise, done, result
 
