@@ -25,7 +25,7 @@
     "istanbul": "^0.3.13",
     "mocha": "^2.0.0",
     "rewire": "^2.1.4",
-    "standard": "^3.5.0"
+    "standard": "^4.0.0"
   },
   "version": "5.6.0",
   "engines": {
