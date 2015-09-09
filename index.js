@@ -44,7 +44,6 @@ module.exports = function (route, renderer) {
         if (result && typeof result.then === 'function') {
           result.then(function (html) {
             done(null, html)
-
           }, done)
         }
       })
