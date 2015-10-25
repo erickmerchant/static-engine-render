@@ -27,7 +27,7 @@
     "rewire": "^2.1.4",
     "standard": "^5.0.0"
   },
-  "version": "5.7.0",
+  "version": "5.8.0",
   "engines": {
     "node": ">= 1.1.0"
   }
