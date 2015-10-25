@@ -12,8 +12,8 @@
     "url": "https://github.com/erickmerchant/static-engine-render/issues"
   },
   "scripts": {
-    "test": "standard && mocha",
-    "cover": "istanbul cover node_modules/.bin/_mocha"
+    "test": "standard && tap test.js",
+    "cover": "tap test.js --cov --coverage-report=html"
   },
   "homepage": "https://github.com/erickmerchant/static-engine-render",
   "dependencies": {
@@ -22,10 +22,9 @@
     "path-to-regexp": "^1.1.1"
   },
   "devDependencies": {
-    "istanbul": "^0.4.0",
-    "mocha": "^2.0.0",
     "rewire": "^2.1.4",
-    "standard": "^5.0.0"
+    "standard": "^5.0.0",
+    "tap": "^2.2.0"
   },
   "version": "5.8.0",
   "engines": {

@@ -1,120 +1,116 @@
-var assert = require('assert')
-var describe = require('mocha').describe
-var it = require('mocha').it
+var tap = require('tap')
 var renderer = function (page) {
   return new Promise(function (resolve, reject) {
     resolve('<h1>' + page.title + '</h1>')
   })
 }
 
-describe('plugin', function () {
-  it('it should work with a promise', function (done) {
-    var mocked = mock({})
+tap.test('it should work with a promise', function (t) {
+  var mocked = mock({})
 
-    var render = mocked.plugin('./test/target/:slug/index.html', renderer)
+  var render = mocked.plugin('./test/target/:slug/index.html', renderer)
 
-    render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
-      .then(function (pages) {
-        assert.deepEqual(mocked.output, {
-          mkdirp: [
-            './test/target/test-1-2-3'
-          ],
-          fs: {
-            './test/target/test-1-2-3/index.html': '<h1>Test One Two Three</h1>'
-          }
-        })
-
-        done()
+  render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
+    .then(function (pages) {
+      t.deepEqual(mocked.output, {
+        mkdirp: [
+          './test/target/test-1-2-3'
+        ],
+        fs: {
+          './test/target/test-1-2-3/index.html': '<h1>Test One Two Three</h1>'
+        }
       })
-  })
 
-  it('it should work with the callback', function (done) {
-    var mocked = mock({})
-
-    var render = mocked.plugin('./test/target/:slug/index.html', function (page, done) {
-      done(null, '<h1>' + page.title + '</h1>')
+      t.end()
     })
+})
 
-    render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
-      .then(function (pages) {
-        assert.deepEqual(mocked.output, {
-          mkdirp: [
-            './test/target/test-1-2-3'
-          ],
-          fs: {
-            './test/target/test-1-2-3/index.html': '<h1>Test One Two Three</h1>'
-          }
-        })
+tap.test('it should work with the callback', function (t) {
+  var mocked = mock({})
 
-        done()
-      })
+  var render = mocked.plugin('./test/target/:slug/index.html', function (page, done) {
+    done(null, '<h1>' + page.title + '</h1>')
   })
 
-  it('it should handle errors from the renderer', function (done) {
-    var mocked = mock({})
-    var promises = []
-    var render
-
-    promises.push(new Promise(function (resolve, reject) {
-      render = mocked.plugin('./test/target/:slug/index.html', function (page) {
-        return new Promise(function (resolve, reject) {
-          reject(new Error('renderer error!'))
-        })
+  render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
+    .then(function (pages) {
+      t.deepEqual(mocked.output, {
+        mkdirp: [
+          './test/target/test-1-2-3'
+        ],
+        fs: {
+          './test/target/test-1-2-3/index.html': '<h1>Test One Two Three</h1>'
+        }
       })
 
-      render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
-        .catch(function (err) {
-          assert.equal('renderer error!', err.message)
-
-          resolve()
-        })
-    }))
-
-    promises.push(new Promise(function (resolve, reject) {
-      render = mocked.plugin('./test/target/:slug/index.html', function (page, done) {
-        done(new Error('renderer error!'))
-      })
-
-      render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
-        .catch(function (err) {
-          assert.equal('renderer error!', err.message)
-
-          resolve()
-        })
-    }))
-
-    Promise.all(promises).then(function () { done() })
-  })
-
-  it('it should handle errors from mkdirp', function (done) {
-    var mocked = mock({}, {
-      mkdirp: new Error('mkdirp error!')
+      t.end()
     })
+})
 
-    var render = mocked.plugin('./test/target/:slug/index.html', renderer)
+tap.test('it should handle errors from the renderer', function (t) {
+  var mocked = mock({})
+  var promises = []
+  var render
+
+  promises.push(new Promise(function (resolve, reject) {
+    render = mocked.plugin('./test/target/:slug/index.html', function (page) {
+      return new Promise(function (resolve, reject) {
+        reject(new Error('renderer error!'))
+      })
+    })
 
     render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
       .catch(function (err) {
-        assert.equal('mkdirp error!', err.message)
+        t.equal('renderer error!', err.message)
 
-        done()
+        resolve()
       })
-  })
+  }))
 
-  it('it should handle errors from fs.writeFile', function (done) {
-    var mocked = mock({}, {
-      fs: new Error('fs.writeFile error!')
+  promises.push(new Promise(function (resolve, reject) {
+    render = mocked.plugin('./test/target/:slug/index.html', function (page, done) {
+      done(new Error('renderer error!'))
     })
-
-    var render = mocked.plugin('./test/target/:slug/index.html', renderer)
 
     render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
       .catch(function (err) {
-        assert.equal('fs.writeFile error!', err.message)
+        t.equal('renderer error!', err.message)
 
-        done()
+        resolve()
       })
+  }))
+
+  Promise.all(promises).then(function () { t.end() })
+})
+
+tap.test('it should handle errors from mkdirp', function (t) {
+  var mocked = mock({}, {
+    mkdirp: new Error('mkdirp error!')
   })
+
+  var render = mocked.plugin('./test/target/:slug/index.html', renderer)
+
+  render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
+    .catch(function (err) {
+      t.equal('mkdirp error!', err.message)
+
+      t.end()
+    })
+})
+
+tap.test('it should handle errors from fs.writeFile', function (t) {
+  var mocked = mock({}, {
+    fs: new Error('fs.writeFile error!')
+  })
+
+  var render = mocked.plugin('./test/target/:slug/index.html', renderer)
+
+  render([{slug: 'test-1-2-3', title: 'Test One Two Three'}])
+    .catch(function (err) {
+      t.equal('fs.writeFile error!', err.message)
+
+      t.end()
+    })
 })
 
 function mock (files, errors) {
