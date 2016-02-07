@@ -12,12 +12,12 @@ module.exports = function (route, renderer) {
         var directory = path.dirname(file)
         var mkdirPromise, done, result
 
-        mkdirPromise = new Promise(function (res, rej) {
+        mkdirPromise = new Promise(function (resolve, reject) {
           mkdirp(directory, function (err) {
             if (err) {
-              rej(err)
+              reject(err)
             } else {
-              res()
+              resolve()
             }
           })
         })
