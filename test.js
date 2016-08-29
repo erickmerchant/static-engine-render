@@ -1,11 +1,11 @@
-var tap = require('tap')
+var test = require('tape')
 var renderer = function (page) {
   return new Promise(function (resolve, reject) {
     resolve('<h1>' + page.title + '</h1>')
   })
 }
 
-tap.test('it should work with a promise', function (t) {
+test('it should work with a promise', function (t) {
   var mocked = mock({})
 
   var render = mocked.plugin('./test/target/:slug/index.html', renderer)
@@ -25,7 +25,7 @@ tap.test('it should work with a promise', function (t) {
     })
 })
 
-tap.test('it should work with the callback', function (t) {
+test('it should work with the callback', function (t) {
   var mocked = mock({})
 
   var render = mocked.plugin('./test/target/:slug/index.html', function (page, done) {
@@ -47,7 +47,7 @@ tap.test('it should work with the callback', function (t) {
     })
 })
 
-tap.test('it should handle errors from the renderer', function (t) {
+test('it should handle errors from the renderer', function (t) {
   var mocked = mock({})
   var promises = []
   var render
@@ -83,7 +83,7 @@ tap.test('it should handle errors from the renderer', function (t) {
   Promise.all(promises).then(function () { t.end() })
 })
 
-tap.test('it should handle errors from mkdirp', function (t) {
+test('it should handle errors from mkdirp', function (t) {
   var mocked = mock({}, {
     mkdirp: new Error('mkdirp error!')
   })
@@ -98,7 +98,7 @@ tap.test('it should handle errors from mkdirp', function (t) {
     })
 })
 
-tap.test('it should handle errors from fs.writeFile', function (t) {
+test('it should handle errors from fs.writeFile', function (t) {
   var mocked = mock({}, {
     fs: new Error('fs.writeFile error!')
   })

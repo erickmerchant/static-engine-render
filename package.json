@@ -12,8 +12,8 @@
     "url": "https://github.com/erickmerchant/static-engine-render/issues"
   },
   "scripts": {
-    "test": "standard && tap test.js",
-    "cover": "tap test.js --cov --coverage-report=html"
+    "test": "standard && tape 'test.js' | faucet",
+    "cover": "nyc --reporter=html npm test"
   },
   "homepage": "https://github.com/erickmerchant/static-engine-render",
   "dependencies": {
@@ -22,9 +22,11 @@
     "path-to-regexp": "^1.1.1"
   },
   "devDependencies": {
+    "faucet": "0.0.1",
+    "nyc": "^8.1.0",
     "rewire": "^2.1.4",
     "standard": "^8.0.0",
-    "tap": "^6.3.0"
+    "tape": "^4.6.0"
   },
   "version": "5.11.4",
   "engines": {
